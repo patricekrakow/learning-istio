@@ -43,7 +43,7 @@ Yes, you can!
 6. ...
 
     ```command
-    $ apt-get install -y kubectl
+    $ sudo apt-get install -y kubectl
     ```
 
 ## References
