@@ -113,7 +113,7 @@ Yes, you can!
     server {
       listen 80;
       location / {
-        proxy_pass http://127.0.0.1:8001
+        proxy_pass http://127.0.0.1:8001;
       }
     }
     ```
