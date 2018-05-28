@@ -11,3 +11,6 @@ Yes, you can!
     ```command
     $ sudo apt-get update
     ```
+## References
+
+1. Fan, J. (2017, July 13). *Nested Virtualization in Azure.* Retrieved from https://azure.microsoft.com/en-us/blog/nested-virtualization-in-azure/
