@@ -92,6 +92,40 @@ Yes, you can!
     $ minikube stop
     ```
 
+## Install and Configure nginx
+
+1. Install nginx:
+
+    ```command
+    $ sudo apt-get update
+    $ sudo apt-get install -y nginx
+    ```
+
+2. Configure nginx:
+
+    ```command
+    $ sudo vi /etc/nginx/sites-available/proxy
+    ```
+    
+    and save the following configuration file:
+    
+    ```
+    server {
+      listen 80;
+      location / {
+        proxy_pass http://127.0.0.1:8001
+      }
+    }
+    ```
+    
+    ```command
+    $ sudo rm /etc/nginx/sites-enabled/default
+    $ sudo ln -s /etc/nginx/sites-available/proxy /etc/nginx/sites-enable/proxy
+    $ sudo service nginx configtest
+    $ sudo service nginx reload
+    
+    ```
+
 ## References
 
 1. Fan, J. (2017, July 13). _Nested Virtualization in Azure._ Retrieved from https://azure.microsoft.com/en-us/blog/nested-virtualization-in-azure/
