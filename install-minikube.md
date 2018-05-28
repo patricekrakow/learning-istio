@@ -46,6 +46,18 @@ Yes, you can!
     $ sudo apt-get install -y kubectl
     ```
 
+7. ...
+
+    ```command
+    $ echo "source <(kubectl completion bash)" >> ~/.bashrc
+    ```
+
+8. ...
+
+    ```command
+    $ kubectl version
+    ```
+
 ## References
 
 1. Fan, J. (2017, July 13). _Nested Virtualization in Azure._ Retrieved from https://azure.microsoft.com/en-us/blog/nested-virtualization-in-azure/
