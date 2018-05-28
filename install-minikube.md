@@ -120,7 +120,7 @@ Yes, you can!
     
     ```command
     $ sudo rm /etc/nginx/sites-enabled/default
-    $ sudo ln -s /etc/nginx/sites-available/proxy /etc/nginx/sites-enable/proxy
+    $ sudo ln -s /etc/nginx/sites-available/proxy /etc/nginx/sites-enabled/proxy
     $ sudo service nginx configtest
     $ sudo service nginx reload
     
