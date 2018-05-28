@@ -58,6 +58,40 @@ Yes, you can!
     $ kubectl version
     ```
 
+## Install Minikube
+
+1. Install VirtualBox as hypervisor:
+
+    ```command
+    $ sudo apt-get update
+    ```
+
+2. Install Minikube
+
+    ```command
+    $ curl -Lo minikube https://storage.googleapis.com/minikube/releases/v0.25.0/minikube-linux-amd64
+    $ chmod +x minikube
+    $ sudo mv minikube /usr/local/bin/
+    ```
+
+3. Start Minikube
+
+    ```command
+    $ minikube start
+    ```
+
+4. Check the Status of Minikube
+
+    ```command
+    $ minikube status
+    ```
+
+5. Stop Minikube
+
+    ```command
+    $ minikube stop
+    ```
+
 ## References
 
 1. Fan, J. (2017, July 13). _Nested Virtualization in Azure._ Retrieved from https://azure.microsoft.com/en-us/blog/nested-virtualization-in-azure/
