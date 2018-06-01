@@ -64,6 +64,7 @@ Yes, you can!
 
     ```command
     $ sudo apt-get update
+    $ sudo apt-get install -y virtualbox
     ```
 
 2. Install Minikube
