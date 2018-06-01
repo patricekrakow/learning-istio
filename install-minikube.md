@@ -2,7 +2,24 @@
 
 ## Can I Install Minikube on a Cloud Virtual Machine?
 
-Yes, you can!
+Yes, you can with an Azure VM of size *Standard D2s v3 (2 vcpus, 8 GB memory)* as it allows nested virtualization ;-)
+
+  ```command
+  user@Azure:~$ az group create --name experiment-01 --location francecentral
+  user@Azure:~$ az vm create \
+    --resource-group experiment-01 \
+    --name minikube-01 \
+    --image UbuntuLTS \
+    --size Standard_D2s_v3 \
+    --admin-username radicel \
+    --generate-ssh-keys
+  user@Azure:~$ az vm open-port --port 80 --resource-group experiment-01 --name minikube-01
+  user@Azure:~$ ssh radicel@PublicIPAddress
+  radicel@minikube-01:~$ sudo apt-get -y update
+  radicel@minikube-01:~$ sudo apt-get -y install nginx
+  radicel@minikube-01:~$ exit
+  user@Azure:~$ az group delete --name experiment-01
+  ```
 
 ## Install kubectl
 
