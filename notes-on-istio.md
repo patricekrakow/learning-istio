@@ -1,0 +1,2 @@
+An ingress Gateway describes a load balancer operating at the edge of the mesh receiving incoming HTTP/TCP connections. It configures exposed ports, protocols, etc., but, **unlike** Kubernetes Ingress Resources, does not include any traffic routing configuration. Traffic routing for ingress traffic is instead configured using Istio routing rules, exactly in the same was as for internal service requests.
+[source: https://istio.io/docs/tasks/traffic-management/ingress/, 2018-06-06 ~ 13:33]
