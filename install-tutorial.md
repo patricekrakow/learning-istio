@@ -14,4 +14,10 @@
     $ source /etc/environment
     $ echo $JAVA_HOME
     ```
-2. Install 
+2. Install Maven
+
+    ```command
+    $ sudo apt-get update
+    $ sudo apt-get install -y maven
+    $ mvn --version
+    ```
