@@ -1,5 +1,11 @@
 ## Install JDK
 
+0. Install Git:
+
+    ```command
+    $ git --version
+    ```
+
 1. Install the JDK:
 
     ```command
