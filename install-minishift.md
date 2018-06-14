@@ -40,7 +40,7 @@ When you have finished, you can remove the VM and **all adjacent resources** by 
     # I also keep other handy tools like kubectl and kubetail.sh
     # in that directory
 
-    export MINISHIFT_HOME=~/minishift-1.12.0-darwin-amd64
+    export MINISHIFT_HOME=~/minishift-1.12.0-linux-amd64
     export PATH=$MINISHIFT_HOME:$PATH
 
     minishift profile set tutorial
