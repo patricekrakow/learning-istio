@@ -1,4 +1,4 @@
-# Install Minikube on Linux
+# Install Minishift on Linux
 
 ## Create a Linux Virtual Machine (VM) on Azure
 
@@ -20,3 +20,9 @@ When you have finished, you can remove the VM and **all adjacent resources** by 
   ```command
   user@Azure:~$ az group delete --name experiment-01
   ```
+## Install VirtualBox as Hypervisor
+
+    ```command
+    $ sudo apt-get update
+    $ sudo apt-get install -y virtualbox
+    ```
