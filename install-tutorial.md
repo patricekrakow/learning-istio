@@ -27,3 +27,15 @@
     $ sudo apt-get install -y maven
     $ mvn --version
     ```
+
+3. Install Docker
+
+    ```command
+    $ sudo apt-get update
+    $ sudo apt-get install \
+        apt-transport-https \
+        ca-certificates \
+        curl \
+        software-properties-common
+    $ 
+    ```
