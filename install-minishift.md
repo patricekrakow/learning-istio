@@ -55,4 +55,19 @@ When you have finished, you can remove the VM and **all adjacent resources** by 
     
     $ chmod +x bootstrap-minishift
     $ ./bootstrap-minishift
+    $ export MINISHIFT_HOME=~/minishift-1.12.0-linux-amd64
+    $ export PATH=$MINISHIFT_HOME:$PATH
+    $ eval $(minishift oc-env)
+    $ eval $(minishift docker-env)
+    $ oc login $(minishift ip):8443 -u admin -p admin
+    $ oc get node
+    ```
+
+## Install Istio
+
+    ```command
+    $ curl -L https://github.com/istio/istio/releases/download/0.5.1/istio-0.5.1 \
+        -osx.tar.gz | tar xz
+    $ cd istio-0.5.1
+    $ sudo apt-get install -y virtualbox
     ```
