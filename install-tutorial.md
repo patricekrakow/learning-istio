@@ -32,10 +32,6 @@
 
     ```command
     $ sudo apt-get update
-    $ sudo apt-get install \
-        apt-transport-https \
-        ca-certificates \
-        curl \
-        software-properties-common
-    $ 
+    $ sudo apt-get install docker-ce
+    $ sudo docker run hello-world
     ```
