@@ -773,5 +773,8 @@ spec:
 ~/istio-1.0.5 $ kubectl apply -f samples/bookinfo/networking/destination-rule-all.yaml
 ```
 ```
-to be continued...
+destinationrule.networking.istio.io "productpage" created
+destinationrule.networking.istio.io "reviews" created
+destinationrule.networking.istio.io "ratings" created
+destinationrule.networking.istio.io "details" created
 ```
