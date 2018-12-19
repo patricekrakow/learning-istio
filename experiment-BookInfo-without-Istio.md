@@ -160,3 +160,16 @@ or we can expose the `productpage` service using external load balancer service:
 ```
 service "productpage-lb" exposed
 ```
+
+## Cleanup (otherwise more money will go to Google)
+
+```
+~ $ gcloud container clusters delete istio-cluster-01
+```
+```
+The following clusters will be deleted.
+ - [istio-cluster-01] in [europe-west1-b]
+Do you want to continue (Y/n)?  Y
+Deleting cluster istio-cluster-01...done.
+Deleted [https://container.googleapis.com/v1/projects/istio-project-01/zones/europe-west1-b/clusters/istio-cluster-01].
+```
