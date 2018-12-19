@@ -1,6 +1,6 @@
-# My Experiment with Istio on Google Could Platform using Cloud Shell
+# Experiment BookInfo on Istio (without mTLS)
 
-## Create a Kubernetes cluster of 4 nodes
+## Create a Kubernetes cluster of 4 nodes on GCP
 
 Verifiy that your project is set:
 ```
@@ -701,6 +701,8 @@ If you refresh the page several times, you should see different versions of revi
 
 ## Configuring the Bookinfo Application
 
+_**WARNING.**_ Note that Kubernetes services, like the Bookinfo ones used in this task, must adhere to certain restrictions to take advantage of Istio’s L7 routing features.
+
 ### Routing Rules
 
 Create default destination rules for the Bookinfo services.
@@ -778,3 +780,192 @@ destinationrule.networking.istio.io "reviews" created
 destinationrule.networking.istio.io "ratings" created
 destinationrule.networking.istio.io "details" created
 ```
+
+## Intelligent Routing
+
+### Apply a virtual service to route to **one** version only
+
+Let's have a look at the `samples/bookinfo/networking/virtual-service-all-v1.yaml` file:
+```yaml
+apiVersion: networking.istio.io/v1alpha3
+kind: VirtualService
+metadata:
+  name: productpage
+spec:
+  hosts:
+  - productpage
+  http:
+  - route:
+    - destination:
+        host: productpage
+        subset: v1
+---
+apiVersion: networking.istio.io/v1alpha3
+kind: VirtualService
+metadata:
+  name: reviews
+spec:
+  hosts:
+  - reviews
+  http:
+  - route:
+    - destination:
+        host: reviews
+        subset: v1
+---
+apiVersion: networking.istio.io/v1alpha3
+kind: VirtualService
+metadata:
+  name: ratings
+spec:
+  hosts:
+  - ratings
+  http:
+  - route:
+    - destination:
+        host: ratings
+        subset: v1
+---
+apiVersion: networking.istio.io/v1alpha3
+kind: VirtualService
+metadata:
+  name: details
+spec:
+  hosts:
+  - details
+  http:
+  - route:
+    - destination:
+        host: details
+        subset: v1
+---
+```
+Apply the virtual services:
+```
+~/istio-1.0.5 $ kubectl apply -f samples/bookinfo/networking/virtual-service-all-v1.yaml
+```
+```
+virtualservice.networking.istio.io "productpage" created
+virtualservice.networking.istio.io "reviews" created
+virtualservice.networking.istio.io "ratings" created
+virtualservice.networking.istio.io "details" created
+```
+
+Now the reviews part of the page displays with no rating stars, no matter how many times you refresh. This is because you configured Istio to route all traffic for the reviews service to the version `reviews:v1` and this version of the service does not access the star ratings service.
+
+### Route based on user identity
+
+Let's change the route configuration so that all traffic from a specific user is routed to a specific service version. In this case, all traffic from a user named `Jason` will be routed to the service `reviews:v2`.
+
+Let's have a look at the `samples/bookinfo/networking/virtual-service-reviews-test-v2.yaml` file:
+
+```yaml
+apiVersion: networking.istio.io/v1alpha3
+kind: VirtualService
+metadata:
+  name: reviews
+spec:
+  hosts:
+    - reviews
+  http:
+  - match:
+    - headers:
+        end-user:
+          exact: jason
+    route:
+    - destination:
+        host: reviews
+        subset: v2
+  - route:
+    - destination:
+        host: reviews
+        subset: v1
+```
+Let's apply this change on our `reviews` _virtual service_:
+```
+~/istio-1.0.5 $ kubectl apply -f samples/bookinfo/networking/virtual-service-reviews-test-v2.yaml
+```
+```
+virtualservice.networking.istio.io "reviews" configured
+```
+
+On the `/productpage` of the Bookinfo app, log in as user `jason`.
+Refresh the browser. What do you see? The star ratings appear next to each review.
+
+Log in as another user (pick any name you wish). Refresh the browser. Now the stars are gone. This is because traffic is routed to `reviews:v1` for all users except Jason.
+
+### Traffic Shifting
+
+Let's go back to the inintial situation situation, in which all the requests goes to `reviews:v1` even if logged in as `jason`:
+
+```
+~/istio-1.0.5 $ kubectl apply -f samples/bookinfo/networking/virtual-service-all-v1.yaml
+```
+```
+virtualservice.networking.istio.io "productpage" configured
+virtualservice.networking.istio.io "reviews" configured
+virtualservice.networking.istio.io "ratings" configured
+virtualservice.networking.istio.io "details" configured
+```
+
+Notice that the reviews part of the page displays with no rating stars, no matter how many times you refresh. This is because you configured Istio to route all traffic for the reviews service to the version reviews:v1 and this version of the service does not access the star ratings service.
+
+Let's now transfer 50% of the traffic from `reviews:v1` to `reviews:v3` with the `samples/bookinfo/networking/virtual-service-reviews-50-v3.yaml` file:
+
+```yaml
+apiVersion: networking.istio.io/v1alpha3
+kind: VirtualService
+metadata:
+  name: reviews
+spec:
+  hosts:
+    - reviews
+  http:
+  - route:
+    - destination:
+        host: reviews
+        subset: v1
+      weight: 50
+    - destination:
+        host: reviews
+        subset: v3
+      weight: 50
+```
+
+Let's apply this change on our `reviews` _virtual service_:
+```
+~/istio-1.0.5 $ kubectl apply -f samples/bookinfo/networking/virtual-service-reviews-50-v3.yaml
+```
+```
+virtualservice.networking.istio.io "reviews" configured
+```
+
+Refresh the `/productpage` in your browser and you now see red colored star ratings approximately 50% of the time. This is because the `v3` version of `reviews` accesses the star ratings service, but the `v1` version does not.
+
+Assuming you decide that the `reviews:v3` microservice is stable, you can route 100% of the traffic to `reviews:v3` with the `samples/bookinfo/networking/virtual-service-reviews-v3.yaml` file:
+
+```yaml
+apiVersion: networking.istio.io/v1alpha3
+kind: VirtualService
+metadata:
+  name: reviews
+spec:
+  hosts:
+    - reviews
+  http:
+  - route:
+    - destination:
+        host: reviews
+        subset: v3
+```
+
+Let's apply this change on our `reviews` _virtual service_:
+
+```
+~/istio-1.0.5 $ kubectl apply -f samples/bookinfo/networking/virtual-service-reviews-v3.yaml
+```
+```
+virtualservice.networking.istio.io "reviews" configured
+```
+
+Now when you refresh the `/productpage` you will always see book reviews with red colored star ratings for each review.
